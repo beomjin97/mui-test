@@ -1,0 +1,42 @@
+export enum ManufacturerEnum {
+    CHELSIO = "CHELSIO",
+    CISCO = "CISCO",
+    DELL = "DELL",
+    FINISAR = "FINISAR",
+    FUJITSU = "FUJITSU",
+    HP = "HP",
+    HYNIX = "HYNIX",
+    IBM = "IBM",
+    INNO_LIGHT = "INNO_LIGHT",
+    INTEL = "INTEL",
+    LENOVO = "LENOVO",
+    MICRON = "MICRON",
+    NETAPP = "NETAPP",
+    SAMSUNG = "SAMSUNG",
+    SGI = "SGI",
+    SUN = "SUN",
+    SUPERMICRO = "SUPERMICRO",
+    UNIWIDE = "UNIWIDE",
+    YS_TECH = "Y.S TECH" 
+}
+
+export const manufacturerArray = [
+    ManufacturerEnum.CHELSIO,
+    ManufacturerEnum.CISCO,
+    ManufacturerEnum.DELL,
+    ManufacturerEnum.FINISAR,
+    ManufacturerEnum.FUJITSU,
+    ManufacturerEnum.HP,
+    ManufacturerEnum.IBM,
+    ManufacturerEnum.INNO_LIGHT,
+    ManufacturerEnum.INTEL,
+    ManufacturerEnum.LENOVO,
+    ManufacturerEnum.MICRON,
+    ManufacturerEnum.NETAPP,
+    ManufacturerEnum.SAMSUNG,
+    ManufacturerEnum.SGI,
+    ManufacturerEnum.SUPERMICRO,
+    ManufacturerEnum.UNIWIDE,
+    ManufacturerEnum.YS_TECH,
+
+]
