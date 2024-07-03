@@ -29,6 +29,7 @@ import EditModal from './EditModal';
 import { ManufacturerEnum, manufacturerArray } from '../data/manufacturer';
 import { LocationEnum, locationArray } from '../data/location';
 import { detailedTypeArray } from '../data/part';
+import HistoryModal from './HistoryModal';
 
 const items = [
   {
@@ -289,7 +290,15 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
   return stabilizedThis.map((el) => el[0]);
 }
 
-function RowMenu({setOpen, setEditModalOpen}: {setOpen: Dispatch<SetStateAction<boolean>>; setEditModalOpen: Dispatch<SetStateAction<boolean>>;}) {
+function RowMenu({
+  setOpen, 
+  setEditModalOpen, 
+  setHistoryModalOpen
+}: {
+  setOpen: Dispatch<SetStateAction<boolean>>; 
+  setEditModalOpen: Dispatch<SetStateAction<boolean>>; 
+  setHistoryModalOpen: Dispatch<SetStateAction<boolean>>
+}) {
   return (
     <Dropdown>
       <MenuButton
@@ -300,7 +309,7 @@ function RowMenu({setOpen, setEditModalOpen}: {setOpen: Dispatch<SetStateAction<
       </MenuButton>
       <Menu size="sm" sx={{ minWidth: 140 }}>
         <MenuItem onClick={() => setEditModalOpen(true)}>Edit Data</MenuItem>
-        <MenuItem onClick={() => setEditModalOpen(true)}>Manage History</MenuItem>
+        <MenuItem onClick={() => setHistoryModalOpen(true)}>Manage History</MenuItem>
         <Divider />
         <MenuItem color="danger" onClick={() => setOpen(true)}>Delete</MenuItem>
       </Menu>
@@ -311,6 +320,7 @@ function RowMenu({setOpen, setEditModalOpen}: {setOpen: Dispatch<SetStateAction<
 export default function OrderTable() {
   const [modalOpen, setModalOepn] = useState<boolean>(false);
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
+  const [historyModalOpen, setHistoryModalOpen] = useState<boolean>(false);
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [open, setOpen] = useState(false);
   const renderFilters = () => (
@@ -499,7 +509,7 @@ export default function OrderTable() {
                   <Typography level="body-xs">{item.detailedPlace}</Typography>
                 </td>
                 <td>
-                  <RowMenu setOpen={setModalOepn} setEditModalOpen={setEditModalOpen}/>
+                  <RowMenu setOpen={setModalOepn} setEditModalOpen={setEditModalOpen} setHistoryModalOpen={setHistoryModalOpen}/>
                 </td>
                 {/* <td>
                   <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
@@ -556,6 +566,7 @@ export default function OrderTable() {
       </Box>
       <RemoveModal open={modalOpen} setOpen={setModalOepn} />
       <EditModal open={editModalOpen} setOpen={setEditModalOpen} />
+      <HistoryModal open={historyModalOpen} setOpen={setHistoryModalOpen} />
     </>
   );
 }
