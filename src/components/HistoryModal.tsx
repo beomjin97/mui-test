@@ -10,7 +10,7 @@ import Stack from '@mui/joy/Stack';
 import { Dispatch, SetStateAction } from 'react';
 import Radio from '@mui/joy/Radio';
 import RadioGroup from '@mui/joy/RadioGroup';
-import { Divider, Table } from '@mui/joy';
+import { Table } from '@mui/joy';
 
 interface Props {
     open: boolean;
