@@ -14,8 +14,12 @@ import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import OrderTable from './components/OrderTable';
 import OrderList from './components/OrderList';
+import { useState } from 'react';
+import AddModal from './components/AddModal';
 
 export default function JoyOrderDashboardTemplate() {
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
@@ -94,6 +98,7 @@ export default function JoyOrderDashboardTemplate() {
               color="primary"
               startDecorator={<Upload />}
               size="sm"
+              onClick={() => setModalOpen(true)}
             >
               Upload New Data
             </Button>
@@ -102,6 +107,7 @@ export default function JoyOrderDashboardTemplate() {
           <OrderList />
         </Box>
       </Box>
+      <AddModal open={modalOpen} setOpen={setModalOpen}/>
     </CssVarsProvider>
   );
 }

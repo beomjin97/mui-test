@@ -27,8 +27,8 @@ function createData(
 
 const rows = [
     createData('2024-05-01', 'import', 1),
-    createData('2024-05-05', 'import', 2),
-    createData('2024-05-02', 'export', 2),
+    createData('2024-05-02', 'import', 2),
+    createData('2024-05-05', 'export', 2),
   ];
 
 export default function HistoryModal ({open, setOpen}: Props) {
