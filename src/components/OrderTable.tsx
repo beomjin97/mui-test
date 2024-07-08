@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
 import Divider from '@mui/joy/Divider';
@@ -30,6 +30,8 @@ import { ManufacturerEnum, manufacturerArray } from '../data/manufacturer';
 import { LocationEnum, locationArray } from '../data/location';
 import { detailedTypeArray } from '../data/part';
 import HistoryModal from './HistoryModal';
+import { Part, History } from '../response/part';
+import { getPartList } from '../httpRequest';
 
 const items = [
   {
@@ -101,32 +103,53 @@ function RowMenu({
 }
 
 export default function OrderTable() {
+  const [data, setData] = useState<Array<Part>>([])
   const [modalOpen, setModalOepn] = useState<boolean>(false);
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [historyModalOpen, setHistoryModalOpen] = useState<boolean>(false);
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [open, setOpen] = useState(false);
+
+  const calculateQuantity = (historyArray: Array<History>) => {
+    const acc = historyArray.reduce((prev, curr) => {
+      if (curr.isImport) {
+        prev.quantity += curr.quantity
+      } else {
+        prev.quantity -= curr.quantity
+      }
+      return prev
+    }, {isImport: true, quantity: 0})
+
+    return acc.quantity
+  }
+
+  useEffect(() => {
+    getPartList().then((res) => {
+      setData(res.data)
+    })
+  },[])
+
   const renderFilters = () => (
     <>
       <FormControl size="sm">
         <FormLabel>detailed type</FormLabel>
         <Select size="sm" placeholder="ALL">
           <Option value="all">ALL</Option>
-          {detailedTypeArray.map((detailedType) => (<Option value={detailedType}>{detailedType}</Option>))}
+          {detailedTypeArray.map((detailedType, idx) => (<Option value={detailedType} key={idx}>{detailedType}</Option>))}
         </Select>
       </FormControl>
       <FormControl size="sm">
         <FormLabel>manufacturer</FormLabel>
         <Select size="sm" placeholder="ALL">
           <Option value="All">ALL</Option>
-          {manufacturerArray.map((manufacturer: ManufacturerEnum) => (<Option value={manufacturer}>{manufacturer}</Option>))}
+          {manufacturerArray.map((manufacturer: ManufacturerEnum, idx) => (<Option value={manufacturer} key={idx}>{manufacturer}</Option>))}
         </Select>
       </FormControl>
       <FormControl size="sm">
         <FormLabel>place</FormLabel>
         <Select size="sm" placeholder="ALL">
           <Option value="all">ALL</Option>
-          {locationArray.map((location: LocationEnum) => (<Option value={location}>{location}</Option>))}
+          {locationArray.map((location: LocationEnum, idx) => (<Option value={location} key={idx}>{location}</Option>))}
           <Option value="문화관">문화관</Option>
         </Select>
       </FormControl>
@@ -249,7 +272,8 @@ export default function OrderTable() {
             </tr>
           </thead>
           <tbody>
-            {items.map((item) => (
+            {data.map((item) => (
+              <>
               <tr key={item.id}>
                 <td style={{ textAlign: 'center', width: 120 }}>
                   <Checkbox
@@ -277,19 +301,21 @@ export default function OrderTable() {
                   <Typography level="body-xs">{item.detailedType}</Typography>
                 </td>
                 <td>
-                  <Typography level="body-xs">{item.partName}</Typography>
+                  <Typography level="body-xs">{item.name}</Typography>
                 </td>
                 <td>
-                  <Typography level="body-xs">{item.partNumber}</Typography>
+                  <Typography level="body-xs">{item.number}</Typography>
                 </td>
                 <td>
-                  <Typography level="body-xs">{item.quantity}</Typography>
+                  <Typography level="body-xs">
+                    {calculateQuantity(item.histories)}
+                  </Typography>
                 </td>
                 <td>
-                  <Typography level="body-xs">{item.place}</Typography>
+                  <Typography level="body-xs">{item.storageLocation}</Typography>
                 </td>
                 <td>
-                  <Typography level="body-xs">{item.detailedPlace}</Typography>
+                  <Typography level="body-xs">{item.detailedStorageLocation}</Typography>
                 </td>
                 <td>
                   <RowMenu setOpen={setModalOepn} setEditModalOpen={setEditModalOpen} setHistoryModalOpen={setHistoryModalOpen}/>
@@ -300,6 +326,8 @@ export default function OrderTable() {
                   </Box>
                 </td> */}
               </tr>
+              <HistoryModal open={historyModalOpen} setOpen={setHistoryModalOpen} histories={item.histories}/>
+              </>
             ))}
           </tbody>
         </Table>
@@ -349,7 +377,7 @@ export default function OrderTable() {
       </Box>
       <RemoveModal open={modalOpen} setOpen={setModalOepn} />
       <EditModal open={editModalOpen} setOpen={setEditModalOpen} />
-      <HistoryModal open={historyModalOpen} setOpen={setHistoryModalOpen} />
+      
     </>
   );
 }

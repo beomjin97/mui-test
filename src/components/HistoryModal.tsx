@@ -7,14 +7,16 @@ import ModalDialog from '@mui/joy/ModalDialog';
 import DialogTitle from '@mui/joy/DialogTitle';
 import DialogContent from '@mui/joy/DialogContent';
 import Stack from '@mui/joy/Stack';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Radio from '@mui/joy/Radio';
 import RadioGroup from '@mui/joy/RadioGroup';
 import { Table } from '@mui/joy';
+import { History } from '../response/part';
 
 interface Props {
     open: boolean;
     setOpen: Dispatch<SetStateAction<boolean>>
+    histories: Array<History>
 }
 
 function createData(
@@ -31,7 +33,8 @@ const rows = [
     createData('2024-05-05', 'export', 2),
   ];
 
-export default function HistoryModal ({open, setOpen}: Props) {
+export default function HistoryModal ({open, setOpen, histories}: Props) {
+
     return (
         <Modal open={open} onClose={() => setOpen(false)}>
         <ModalDialog>
@@ -46,10 +49,10 @@ export default function HistoryModal ({open, setOpen}: Props) {
                 </tr>
             </thead>
           <tbody>
-            {rows.map((row, idx) => (
+            {histories.map((row, idx) => (
             <tr key={idx}>
-                <td>{row.date}</td>
-                <td>{row.type}</td>
+                <td>{new Date(row.date).toLocaleDateString()}</td>
+                <td>{row.isImport ? 'import' : 'export'}</td>
                 <td>{row.quantity}</td>
             </tr>
             ))}
