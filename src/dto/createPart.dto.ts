@@ -1,10 +1,11 @@
 export interface CreatePartDto {
-    number: string;
+    number?: string
     type: string;
-    detailedType?: string;
+    detailedType?: string
     name: string;
     manufacturer: string;
     storageLocation: string;
-    detailedStorageLocation?: string;
-    quantity: string;
+    detailedStorageLocation?: string
+    quantity: number;
+    date: Date
 }
