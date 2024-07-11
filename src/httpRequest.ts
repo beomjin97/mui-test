@@ -21,9 +21,9 @@ export const getPart = (id: number) => axiosInstance.get(`/part/${id}`)
 export const createNewPart = (createPartDto: CreatePartDto) => axiosInstance.post('/part', createPartDto)
 export const modifyPart = (id: number, modifyPartDto: ModifyPartDto) => axiosInstance.patch(`/part/${id}`, modifyPartDto)
 export const deletePart = (id: number) => axiosInstance.delete(`/part/${id}`)
-export const addHistroy = (id: number, createHistroyDto: CreateHistroyDto) => axiosInstance.post(`/part/${id}/histroy`, createHistroyDto)
+export const addHistory = (id: number, createHistroyDto: CreateHistroyDto) => axiosInstance.post(`/part/${id}/histroy`, createHistroyDto)
 
 
 // HISTORY API CALL
 export const modifyHistory = (id: number, modifyHistoryDto: ModifyHistroyDto) => axiosInstance.patch(`/history/${id}`,modifyHistoryDto)
-export const deleteHistroy = (id: number) => axiosInstance.delete(`/history/${id}`)
+export const deleteHistory = (id: number) => axiosInstance.delete(`/history/${id}`)

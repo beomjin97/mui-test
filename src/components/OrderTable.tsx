@@ -78,11 +78,15 @@ const items = [
 function RowMenu({
   setOpen, 
   setEditModalOpen, 
-  setHistoryModalOpen
+  setHistoryModalOpen,
+  id,
+  setId
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>; 
   setEditModalOpen: Dispatch<SetStateAction<boolean>>; 
   setHistoryModalOpen: Dispatch<SetStateAction<boolean>>
+  id: number,
+  setId: Dispatch<SetStateAction<number>>
 }) {
   return (
     <Dropdown>
@@ -93,8 +97,14 @@ function RowMenu({
         <MoreHorizRoundedIcon />
       </MenuButton>
       <Menu size="sm" sx={{ minWidth: 140 }}>
-        <MenuItem onClick={() => setEditModalOpen(true)}>Edit Data</MenuItem>
-        <MenuItem onClick={() => setHistoryModalOpen(true)}>Manage History</MenuItem>
+        <MenuItem onClick={() => {
+          setEditModalOpen(true)
+          setId(id)
+          }}>Edit Data</MenuItem>
+        <MenuItem onClick={() => {
+          setHistoryModalOpen(true)
+          setId(id)
+          }}>Manage History</MenuItem>
         <Divider />
         <MenuItem color="danger" onClick={() => setOpen(true)}>Delete</MenuItem>
       </Menu>
@@ -109,6 +119,7 @@ export default function OrderTable() {
   const [historyModalOpen, setHistoryModalOpen] = useState<boolean>(false);
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [open, setOpen] = useState(false);
+  const [id, setId] = useState(0)
 
   const calculateQuantity = (historyArray: Array<History>) => {
     const acc = historyArray.reduce((prev, curr) => {
@@ -318,7 +329,7 @@ export default function OrderTable() {
                   <Typography level="body-xs">{item.detailedStorageLocation}</Typography>
                 </td>
                 <td>
-                  <RowMenu setOpen={setModalOepn} setEditModalOpen={setEditModalOpen} setHistoryModalOpen={setHistoryModalOpen}/>
+                  <RowMenu setOpen={setModalOepn} setEditModalOpen={setEditModalOpen} setHistoryModalOpen={setHistoryModalOpen} id={item.id} setId={setId}/>
                 </td>
                 {/* <td>
                   <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
@@ -326,7 +337,6 @@ export default function OrderTable() {
                   </Box>
                 </td> */}
               </tr>
-              <HistoryModal open={historyModalOpen} setOpen={setHistoryModalOpen} histories={item.histories}/>
               </>
             ))}
           </tbody>
@@ -375,8 +385,9 @@ export default function OrderTable() {
           Next
         </Button> */}
       </Box>
-      <RemoveModal open={modalOpen} setOpen={setModalOepn} />
-      <EditModal open={editModalOpen} setOpen={setEditModalOpen} />
+      <HistoryModal open={historyModalOpen} setOpen={setHistoryModalOpen} histories={data.find(part => part.id === id )?.histories} id={id}/>
+      <RemoveModal open={modalOpen} setOpen={setModalOepn} id={id} />
+      <EditModal open={editModalOpen} setOpen={setEditModalOpen} data={data.find(part => part.id === id)}/>
       
     </>
   );

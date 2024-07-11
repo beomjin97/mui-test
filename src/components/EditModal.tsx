@@ -8,56 +8,88 @@ import DialogContent from '@mui/joy/DialogContent';
 import Stack from '@mui/joy/Stack';
 import Button from '@mui/joy/Button';
 import Autocomplete from '@mui/joy/Autocomplete'
-import { Dispatch, SetStateAction } from 'react';
-import { manufacturerArray } from '../data/manufacturer';
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, SyntheticEvent, useEffect, useState } from 'react';
+import { ManufacturerEnum, manufacturerArray } from '../data/manufacturer';
 import { detailedTypeArray, partArray } from '../data/part';
 import { locationArray } from '../data/location';
+import { Part } from '../response/part';
+import { modifyPart } from '../httpRequest';
 
 interface Props {
     open: boolean;
     setOpen: Dispatch<SetStateAction<boolean>>;
+    data: Part | undefined
 }
 
-export default function EditModal({open, setOpen}: Props) {
-    return (
+export default function EditModal({open, setOpen, data}: Props) {
+  
+  const [formData, setFormData] = useState({manufacturer: data?.manufacturer,
+    type: data?.type,
+    detailedType: data?.detailedType,
+    name: data?.name,
+    number: data?.number,
+    storageLocation: data?.storageLocation,
+    detailedStorageLocation: data?.detailedStorageLocation})
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const {name, value} = e.target;
+    setFormData({...formData, [name]: value})   
+  }
+
+  const handleInputChange = (e: SyntheticEvent<Element, Event>, value: ManufacturerEnum | null) => {
+    console.log('trigger handle input change')
+    console.log(e)
+    //@ts-ignore
+    const { id }: {id: string} = e.target;
+    setFormData({...formData, [id.split('-')[0]]: value})
+
+  }
+  
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setOpen(false);
+    // if (data !== undefined) {
+    //   modifyPart(data.id, formData).then(() => alert('수정됨요')).catch((err) => alert('뭔가 잘못 됐음'))
+    // }
+    console.log(formData);
+  }
+  
+  return (
         <Modal open={open} onClose={() => setOpen(false)}>
         <ModalDialog>
           <DialogTitle>edit part details</DialogTitle>
           <DialogContent>edit the information of this part.</DialogContent>
           <form
-            onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
-              event.preventDefault();
-              setOpen(false);
-            }}
+            onSubmit={handleSubmit}
           >
             <Stack spacing={2}>
               <FormControl>
                 <FormLabel>Manufacturer</FormLabel>
-                <Autocomplete placeholder="Manufacturer" options={manufacturerArray} required/>
+                <Autocomplete id='manufacturer' placeholder="Manufacturer" options={manufacturerArray} required onChange={handleInputChange} value={data?.manufacturer}/>
               </FormControl>
               <FormControl>
                 <FormLabel>Type</FormLabel>
-                <Autocomplete placeholder="Type" options={partArray} required/>
+                <Autocomplete id='type' placeholder="Type" options={partArray} required value={data?.type} onChange={handleInputChange}/>
               </FormControl>
               <FormControl>
                 <FormLabel>Detailed Type</FormLabel>
-                <Autocomplete placeholder="Detailed Type" options={detailedTypeArray} required/>
+                <Autocomplete id='detailedType' placeholder="Detailed Type" options={detailedTypeArray} required value={data?.detailedType} onChange={handleInputChange}/>
               </FormControl>
               <FormControl>
                 <FormLabel>Name</FormLabel>
-                <Input required />
+                <Input name='name' required value={data?.name} onChange={handleChange}/>
               </FormControl>
               <FormControl>
                 <FormLabel>P/N</FormLabel>
-                <Input required />
+                <Input id='number' required value={data?.number} onChange={handleChange}/>
               </FormControl>
               <FormControl>
                 <FormLabel>Place</FormLabel>
-                <Autocomplete placeholder='Place' options={locationArray} />
+                <Autocomplete id='storageLocation' placeholder='Place' options={locationArray} value={data?.storageLocation} onChange={handleInputChange} />
               </FormControl>
               <FormControl>
                 <FormLabel>Detailed Place</FormLabel>
-                <Input />
+                <Input name='detailedStorageLocation' value={data?.detailedStorageLocation} onChange={handleChange}/>
               </FormControl>
               <Button type="submit">Edit</Button>
             </Stack>

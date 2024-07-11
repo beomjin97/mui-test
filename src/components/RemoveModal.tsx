@@ -1,40 +1,42 @@
 import Button from '@mui/joy/Button';
-import Divider from '@mui/joy/Divider';
-import DialogTitle from '@mui/joy/DialogTitle';
-import DialogContent from '@mui/joy/DialogContent';
 import DialogActions from '@mui/joy/DialogActions';
-import Modal from '@mui/joy/Modal';
-import ModalDialog from '@mui/joy/ModalDialog';
 import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 import { SetStateAction, Dispatch } from 'react';
+import CommonModal from './CommonModal';
+import { deletePart } from '../httpRequest';
 
 interface Props {
     open: boolean;
-    setOpen: Dispatch<SetStateAction<boolean>>
+    setOpen: Dispatch<SetStateAction<boolean>>;
+    id: number;
 }
 
-export default function RemoveModal({open, setOpen}: Props) {
+export default function RemoveModal({open, setOpen, id}: Props) {
 
     return (
-    <Modal open={open} onClose={() => setOpen(false)}>
-        <ModalDialog variant="outlined" role="alertdialog">
-            <DialogTitle>
-            <WarningRoundedIcon />
-                Confirmation
-            </DialogTitle>
-            <Divider />
-            <DialogContent>
-                Are you sure you want to discard this part data?
-            </DialogContent>
+    <CommonModal 
+        open={open} 
+        setOpen={setOpen} 
+        title={
+                <>
+                  <WarningRoundedIcon />
+                  Confirmation
+                </>
+              } 
+        content='Are you sure you want to discard this part data?'>
         <DialogActions>
-            <Button variant="solid" color="danger" onClick={() => setOpen(false)}>
+            <Button variant="solid" color="danger" onClick={() => {
+                setOpen(false)
+                deletePart(id)
+                    .then(() => alert('삭제요'))
+                    .catch((err:unknown) => alert(err))
+                }}>
             Discard
             </Button>
             <Button variant="plain" color="neutral" onClick={() => setOpen(false)}>
             Cancel
             </Button>
         </DialogActions>
-        </ModalDialog>
-  </Modal>
+    </CommonModal>
     )
 }

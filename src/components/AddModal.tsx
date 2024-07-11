@@ -1,10 +1,6 @@
 import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
 import Input from '@mui/joy/Input';
-import Modal from '@mui/joy/Modal';
-import ModalDialog from '@mui/joy/ModalDialog';
-import DialogTitle from '@mui/joy/DialogTitle';
-import DialogContent from '@mui/joy/DialogContent';
 import Stack from '@mui/joy/Stack';
 import Button from '@mui/joy/Button';
 import Autocomplete from '@mui/joy/Autocomplete'
@@ -13,6 +9,7 @@ import { manufacturerArray } from '../data/manufacturer';
 import { detailedTypeArray, partArray } from '../data/part';
 import { locationArray } from '../data/location';
 import { createNewPart } from '../httpRequest';
+import CommonModal from './CommonModal';
 
 interface Props {
     open: boolean;
@@ -30,19 +27,19 @@ export default function AddModal({open, setOpen}: Props) {
       quantity: 0,
     })
 
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+      const {name, value} = e.target;
+      if (name === 'quantity') {
+          setFormData({...formData, [name]: parseInt(value)})
+      } else {
+          setFormData({...formData, [name]: value})   
+      }   
+    }
+
     const handleInputChange = (e: SyntheticEvent<Element, Event>, value: string) => {
       //@ts-ignore
       const { id }: {id: string} = e.target;
       setFormData({...formData, [id.split('-')[0]]: value})
-    }
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-      const {name, value} = e.target;
-      if (name === 'quantity') {
-        setFormData({...formData, [name]: parseInt(value)})
-      } else {
-        setFormData({...formData, [name]: value})
-      }
     }
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -55,11 +52,8 @@ export default function AddModal({open, setOpen}: Props) {
     }
  
     return (
-        <Modal open={open} onClose={() => setOpen(false)}>
-        <ModalDialog>
-          <DialogTitle>Add new Part</DialogTitle>
-          <DialogContent>Add new Part Data.</DialogContent>
-          <form
+      <CommonModal open={open} setOpen={setOpen} title='Add new Part' content='Add new Part Data.'>
+        <form
             onSubmit={handleSubmit}
           >
             <Stack spacing={2}>
@@ -102,7 +96,7 @@ export default function AddModal({open, setOpen}: Props) {
               <Button type="submit">Add</Button>
             </Stack>
           </form>
-        </ModalDialog>
-      </Modal>
+      </CommonModal>
+          
     )
 }
