@@ -34,9 +34,9 @@ export const manufacturerArray = [
     ManufacturerEnum.MICRON,
     ManufacturerEnum.NETAPP,
     ManufacturerEnum.SAMSUNG,
+    ManufacturerEnum.SUN,
     ManufacturerEnum.SGI,
     ManufacturerEnum.SUPERMICRO,
     ManufacturerEnum.UNIWIDE,
     ManufacturerEnum.YS_TECH,
-
 ]

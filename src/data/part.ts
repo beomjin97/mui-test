@@ -1,5 +1,4 @@
 export enum partEnum {
-    ALL = "ALL",
     CPU = "CPU",
     MEMORY = "Memory",
     DISK = "Disk",
@@ -13,7 +12,6 @@ export enum partEnum {
 }
 
 export const partArray = [
-    partEnum.ALL, 
     partEnum.CPU, 
     partEnum.MEMORY, 
     partEnum.DISK, 

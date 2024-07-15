@@ -3,7 +3,7 @@ import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
 import Input from '@mui/joy/Input';
 import Stack from '@mui/joy/Stack';
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react';
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useState } from 'react';
 import Radio from '@mui/joy/Radio';
 import RadioGroup from '@mui/joy/RadioGroup';
 import { Table } from '@mui/joy';
@@ -18,20 +18,6 @@ interface Props {
     id: number
 }
 
-function createData(
-    date: string,
-    type: string,
-    quantity: number,
-  ) {
-    return { date, type, quantity};
-  }
-
-const rows = [
-    createData('2024-05-01', 'import', 1),
-    createData('2024-05-02', 'import', 2),
-    createData('2024-05-05', 'export', 2),
-  ];
-
 export default function HistoryModal ({open, setOpen, histories, id}: Props) {
 
     const [formData, setFormData] = useState({
@@ -42,14 +28,27 @@ export default function HistoryModal ({open, setOpen, histories, id}: Props) {
 
     const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
       const {name, value} = e.target
-      setFormData({
-        ...formData, 
-        [name] : value
-      })
+      if (name === 'isImport') {
+        setFormData({
+          ...formData,
+          isImport : value === 'import'
+        }) 
+      } else if ( name==='quantity' ) {
+        setFormData({
+          ...formData,
+          quantity: parseInt(value)
+        })
+      } else {
+        setFormData({
+          ...formData, 
+          [name] : value
+        })
+      }
     }
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault()
+      //console.log(formData)
       addHistory(id, formData)
       setOpen(false);
     }
@@ -81,18 +80,18 @@ export default function HistoryModal ({open, setOpen, histories, id}: Props) {
             <Stack spacing={2}>
               <FormControl>
                 <FormLabel>date</FormLabel>
-                <Input autoFocus required type='date' onChange={handleChange}/>
+                <Input autoFocus required type='date' name='date' onChange={handleChange}/>
               </FormControl>
               <FormControl>
-                <FormLabel>import / exit</FormLabel>
-                <RadioGroup defaultValue="import" onChange={handleChange}>
+                <FormLabel>import / export</FormLabel>
+                <RadioGroup defaultValue="import" name='isImport' onChange={handleChange}>
                     <Radio value="import" label="import"/>
-                    <Radio value="exit" label="exit"/>
+                    <Radio value="export" label="exit"/>
                 </RadioGroup>
               </FormControl>
               <FormControl>
                 <FormLabel>quantity</FormLabel>
-                <Input autoFocus required type='number' onChange={handleChange}/>
+                <Input autoFocus required type='number' name='quantity' onChange={handleChange}/>
               </FormControl>
               <Button type="submit">Submit</Button>
             </Stack>

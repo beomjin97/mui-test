@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { ChangeEvent, MouseEvent, KeyboardEvent, FocusEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
 import Divider from '@mui/joy/Divider';
@@ -28,7 +28,7 @@ import RemoveModal from './RemoveModal';
 import EditModal from './EditModal';
 import { ManufacturerEnum, manufacturerArray } from '../data/manufacturer';
 import { LocationEnum, locationArray } from '../data/location';
-import { detailedTypeArray } from '../data/part';
+import { detailedTypeArray, partArray } from '../data/part';
 import HistoryModal from './HistoryModal';
 import { Part, History } from '../response/part';
 import { getPartList } from '../httpRequest';
@@ -93,17 +93,16 @@ function RowMenu({
       <MenuButton
         slots={{ root: IconButton }}
         slotProps={{ root: { variant: 'plain', color: 'neutral', size: 'sm' } }}
+        onClick={() => setId(id)}
       >
         <MoreHorizRoundedIcon />
       </MenuButton>
       <Menu size="sm" sx={{ minWidth: 140 }}>
         <MenuItem onClick={() => {
           setEditModalOpen(true)
-          setId(id)
           }}>Edit Data</MenuItem>
         <MenuItem onClick={() => {
           setHistoryModalOpen(true)
-          setId(id)
           }}>Manage History</MenuItem>
         <Divider />
         <MenuItem color="danger" onClick={() => setOpen(true)}>Delete</MenuItem>
@@ -113,13 +112,22 @@ function RowMenu({
 }
 
 export default function OrderTable() {
-  const [data, setData] = useState<Array<Part>>([])
+  const [data, setData] = useState<Array<Part>>([]);
+  const [filteredData, setFilteredData] = useState<Array<Part>>([]);
   const [modalOpen, setModalOepn] = useState<boolean>(false);
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [historyModalOpen, setHistoryModalOpen] = useState<boolean>(false);
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [open, setOpen] = useState(false);
   const [id, setId] = useState(0)
+  const [searchKeyWord, setSearchKeyWord] = useState('')
+
+  const [filter, setFilter] = useState({
+    type: 'ALL',
+    detailedType: 'ALL',
+    manufacturer: 'ALL',
+    place: 'ALL'
+  })
 
   const calculateQuantity = (historyArray: Array<History>) => {
     const acc = historyArray.reduce((prev, curr) => {
@@ -137,29 +145,78 @@ export default function OrderTable() {
   useEffect(() => {
     getPartList().then((res) => {
       setData(res.data)
+      setFilteredData(res.data)
     })
+
   },[])
+
+  useEffect(() => {
+
+    const filteredData = data.filter(part => {
+      if (filter.type === 'ALL') {
+        return true;
+      } else {
+        return part.type === filter.type
+      }
+     }).filter(part => {
+      if (filter.detailedType === 'ALL') {
+        return true;
+      } else {
+        return part.detailedType === filter.detailedType
+      }
+    }).filter(part => {
+      if(filter.manufacturer === 'ALL') {
+        return true;
+      } else {
+        return part.manufacturer === filter.manufacturer
+      }
+    }).filter(part => {
+      if(filter.place === 'ALL') {
+        return true;
+      } else {
+        return part.storageLocation === filter.place
+      }
+    }).filter(part => part.number.startsWith(searchKeyWord) || part.name.startsWith(searchKeyWord)) 
+    setFilteredData(filteredData)
+  },[filter.detailedType, filter.manufacturer, filter.place, filter.type, searchKeyWord])
 
   const renderFilters = () => (
     <>
       <FormControl size="sm">
+        <FormLabel>type</FormLabel>
+        <Select size="sm" placeholder="ALL" value={filter.type} onChange={(event, value) => {
+          console.log(value)
+          setFilter(prev => ({...prev, type: value || 'ALL'}))
+        }}>
+          <Option value="ALL">ALL</Option>
+          {partArray.map((type, idx) => (<Option value={type} key={idx}>{type}</Option>))}
+        </Select>
+      </FormControl>
+      <FormControl size="sm">
         <FormLabel>detailed type</FormLabel>
-        <Select size="sm" placeholder="ALL">
-          <Option value="all">ALL</Option>
+        <Select size="sm" placeholder="ALL" id="detailedType" value={filter.detailedType} onChange={(event, value) => {
+          console.log(value)
+          setFilter(prev => ({...prev, detailedType: value || 'ALL'}))
+        }}>
+          <Option value="ALL">ALL</Option>
           {detailedTypeArray.map((detailedType, idx) => (<Option value={detailedType} key={idx}>{detailedType}</Option>))}
         </Select>
       </FormControl>
       <FormControl size="sm">
         <FormLabel>manufacturer</FormLabel>
-        <Select size="sm" placeholder="ALL">
-          <Option value="All">ALL</Option>
+        <Select size="sm" placeholder="ALL" value={filter.manufacturer} onChange={(event, value) => {
+          setFilter(prev => ({...prev, manufacturer: value || 'ALL'}))
+        }}>
+          <Option value="ALL">ALL</Option>
           {manufacturerArray.map((manufacturer: ManufacturerEnum, idx) => (<Option value={manufacturer} key={idx}>{manufacturer}</Option>))}
         </Select>
       </FormControl>
       <FormControl size="sm">
         <FormLabel>place</FormLabel>
-        <Select size="sm" placeholder="ALL">
-          <Option value="all">ALL</Option>
+        <Select size="sm" placeholder="ALL" value={filter.place} onChange={(event, value) => {
+          setFilter(prev => ({...prev, place: value || 'ALL'}))
+        }}>
+          <Option value="ALL">ALL</Option>
           {locationArray.map((location: LocationEnum, idx) => (<Option value={location} key={idx}>{location}</Option>))}
           <Option value="문화관">문화관</Option>
         </Select>
@@ -221,7 +278,7 @@ export default function OrderTable() {
       >
         <FormControl sx={{ flex: 1 }} size="sm">
           <FormLabel>Search for name or part number</FormLabel>
-          <Input size="sm" placeholder="Search" startDecorator={<SearchIcon />} />
+          <Input size="sm" placeholder="Search" startDecorator={<SearchIcon />} value={searchKeyWord} onChange={(e) => {setSearchKeyWord(e.target.value)}}/>
         </FormControl>
         {renderFilters()}
       </Box>
@@ -283,7 +340,7 @@ export default function OrderTable() {
             </tr>
           </thead>
           <tbody>
-            {data.map((item) => (
+            {filteredData.map((item, idx) => (
               <>
               <tr key={item.id}>
                 <td style={{ textAlign: 'center', width: 120 }}>
