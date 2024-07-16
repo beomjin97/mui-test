@@ -55,7 +55,7 @@ export default function EditModal({open, setOpen, data}: Props) {
     if (data !== undefined) {
       modifyPart(data.id, formData)
         .then(() => alert('수정됨요'))
-        .catch((err) => alert('something wrong'))
+        .catch(() => alert('something wrong'))
     }
     console.log(formData);
   }

@@ -17,6 +17,6 @@ export interface Part {
 export interface History {
     id: number;
     isImport: boolean;
-    date: Date;
+    date: string;
     quantity: number;
 }

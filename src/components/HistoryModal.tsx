@@ -64,7 +64,9 @@ export default function HistoryModal ({open, setOpen, histories, id}: Props) {
                 </tr>
             </thead>
           <tbody>
-            {histories?.map((row, idx) => (
+            {histories
+              ?.sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
+              .map((row, idx) => (
             <tr key={idx}>
                 <td>{new Date(row.date).toLocaleDateString()}</td>
                 <td>{row.isImport ? 'import' : 'export'}</td>
@@ -86,7 +88,7 @@ export default function HistoryModal ({open, setOpen, histories, id}: Props) {
                 <FormLabel>import / export</FormLabel>
                 <RadioGroup defaultValue="import" name='isImport' onChange={handleChange}>
                     <Radio value="import" label="import"/>
-                    <Radio value="export" label="exit"/>
+                    <Radio value="export" label="export"/>
                 </RadioGroup>
               </FormControl>
               <FormControl>

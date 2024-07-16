@@ -47,7 +47,9 @@ export default function AddModal({open, setOpen}: Props) {
       setOpen(false);
       console.log(formData)
       createNewPart(formData)
-        .then(() => alert('등록됨요'))
+        .then(() => {
+          location.reload();
+        })
         .catch((err:unknown) => alert(err))
     }
  

@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { ChangeEvent, MouseEvent, KeyboardEvent, FocusEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
 import Divider from '@mui/joy/Divider';
@@ -184,7 +184,7 @@ export default function OrderTable() {
     <>
       <FormControl size="sm">
         <FormLabel>type</FormLabel>
-        <Select size="sm" placeholder="ALL" value={filter.type} onChange={(event, value) => {
+        <Select size="sm" placeholder="ALL" value={filter.type} onChange={(_, value) => {
           console.log(value)
           setFilter(prev => ({...prev, type: value || 'ALL'}))
         }}>
@@ -194,7 +194,7 @@ export default function OrderTable() {
       </FormControl>
       <FormControl size="sm">
         <FormLabel>detailed type</FormLabel>
-        <Select size="sm" placeholder="ALL" id="detailedType" value={filter.detailedType} onChange={(event, value) => {
+        <Select size="sm" placeholder="ALL" id="detailedType" value={filter.detailedType} onChange={(_, value) => {
           console.log(value)
           setFilter(prev => ({...prev, detailedType: value || 'ALL'}))
         }}>
@@ -204,7 +204,7 @@ export default function OrderTable() {
       </FormControl>
       <FormControl size="sm">
         <FormLabel>manufacturer</FormLabel>
-        <Select size="sm" placeholder="ALL" value={filter.manufacturer} onChange={(event, value) => {
+        <Select size="sm" placeholder="ALL" value={filter.manufacturer} onChange={(_, value) => {
           setFilter(prev => ({...prev, manufacturer: value || 'ALL'}))
         }}>
           <Option value="ALL">ALL</Option>
@@ -213,7 +213,7 @@ export default function OrderTable() {
       </FormControl>
       <FormControl size="sm">
         <FormLabel>place</FormLabel>
-        <Select size="sm" placeholder="ALL" value={filter.place} onChange={(event, value) => {
+        <Select size="sm" placeholder="ALL" value={filter.place} onChange={(_, value) => {
           setFilter(prev => ({...prev, place: value || 'ALL'}))
         }}>
           <Option value="ALL">ALL</Option>
@@ -340,7 +340,7 @@ export default function OrderTable() {
             </tr>
           </thead>
           <tbody>
-            {filteredData.map((item, idx) => (
+            {filteredData.map((item) => (
               <>
               <tr key={item.id}>
                 <td style={{ textAlign: 'center', width: 120 }}>
