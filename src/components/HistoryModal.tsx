@@ -48,7 +48,6 @@ export default function HistoryModal ({open, setOpen, histories, id}: Props) {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault()
-      //console.log(formData)
       addHistory(id, formData)
       setOpen(false);
     }

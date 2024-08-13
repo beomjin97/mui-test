@@ -151,7 +151,6 @@ export default function OrderTable() {
   },[])
 
   useEffect(() => {
-
     const filteredData = data.filter(part => {
       if (filter.type === 'ALL') {
         return true;
@@ -176,7 +175,7 @@ export default function OrderTable() {
       } else {
         return part.storageLocation === filter.place
       }
-    }).filter(part => part.number.startsWith(searchKeyWord) || part.name.startsWith(searchKeyWord)) 
+    }).filter(part => part.number?.startsWith(searchKeyWord) || part.name?.startsWith(searchKeyWord)) 
     setFilteredData(filteredData)
   },[filter.detailedType, filter.manufacturer, filter.place, filter.type, searchKeyWord])
 
@@ -185,7 +184,6 @@ export default function OrderTable() {
       <FormControl size="sm">
         <FormLabel>type</FormLabel>
         <Select size="sm" placeholder="ALL" value={filter.type} onChange={(_, value) => {
-          console.log(value)
           setFilter(prev => ({...prev, type: value || 'ALL'}))
         }}>
           <Option value="ALL">ALL</Option>
@@ -195,7 +193,6 @@ export default function OrderTable() {
       <FormControl size="sm">
         <FormLabel>detailed type</FormLabel>
         <Select size="sm" placeholder="ALL" id="detailedType" value={filter.detailedType} onChange={(_, value) => {
-          console.log(value)
           setFilter(prev => ({...prev, detailedType: value || 'ALL'}))
         }}>
           <Option value="ALL">ALL</Option>

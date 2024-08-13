@@ -45,7 +45,6 @@ export default function AddModal({open, setOpen}: Props) {
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       setOpen(false);
-      console.log(formData)
       createNewPart(formData)
         .then(() => {
           location.reload();

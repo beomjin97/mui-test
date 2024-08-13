@@ -35,14 +35,11 @@ export default function EditModal({open, setOpen, data}: Props) {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const {name, value} = e.target;
-    console.log(name, value)
     setFormData({...formData, [name]: value})
 
   }
 
   const handleInputChange = (e: SyntheticEvent<Element, Event>, value: any) => {
-    console.log('trigger handle input change')
-    console.log(e)
     //@ts-ignore
     const { id }: {id: string} = e.target;
     setFormData({...formData, [id.split('-')[0]]: value})
@@ -57,7 +54,6 @@ export default function EditModal({open, setOpen, data}: Props) {
         .then(() => alert('수정됨요'))
         .catch(() => alert('something wrong'))
     }
-    console.log(formData);
   }
   
   return (
