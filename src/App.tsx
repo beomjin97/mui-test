@@ -104,7 +104,7 @@ export default function JoyOrderDashboardTemplate() {
             </Button>
           </Box>
           <OrderTable />
-          <OrderList />
+          {/* <OrderList /> */}
         </Box>
       </Box>
       <AddModal open={modalOpen} setOpen={setModalOpen}/>

@@ -254,7 +254,7 @@ export default function OrderTable() {
             <Sheet sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               {renderFilters()}
               <Button color="primary" onClick={() => setOpen(false)}>
-                Submit
+                Close
               </Button>
             </Sheet>
           </ModalDialog>
@@ -283,7 +283,7 @@ export default function OrderTable() {
         className="OrderTableContainer"
         variant="outlined"
         sx={{
-          display: { xs: 'none', sm: 'initial' },
+          display: 'initial',
           width: '100%',
           borderRadius: 'sm',
           flexShrink: 1,
