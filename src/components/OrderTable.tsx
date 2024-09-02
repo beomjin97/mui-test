@@ -215,7 +215,6 @@ export default function OrderTable() {
         }}>
           <Option value="ALL">ALL</Option>
           {locationArray.map((location: LocationEnum, idx) => (<Option value={location} key={idx}>{location}</Option>))}
-          <Option value="문화관">문화관</Option>
         </Select>
       </FormControl>
     </>
