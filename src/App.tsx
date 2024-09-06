@@ -13,7 +13,6 @@ import Upload from '@mui/icons-material/Upload';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import OrderTable from './components/OrderTable';
-import OrderList from './components/OrderList';
 import { useState } from 'react';
 import AddModal from './components/AddModal';
 
@@ -104,7 +103,6 @@ export default function JoyOrderDashboardTemplate() {
             </Button>
           </Box>
           <OrderTable />
-          {/* <OrderList /> */}
         </Box>
       </Box>
       <AddModal open={modalOpen} setOpen={setModalOpen}/>

@@ -234,6 +234,8 @@ export default function OrderTable() {
           placeholder="Search"
           startDecorator={<SearchIcon />}
           sx={{ flexGrow: 1 }}
+          value={searchKeyWord} 
+          onChange={(e) => {setSearchKeyWord(e.target.value)}}
         />
         <IconButton
           size="sm"
@@ -274,7 +276,13 @@ export default function OrderTable() {
       >
         <FormControl sx={{ flex: 1 }} size="sm">
           <FormLabel>Search for name or part number</FormLabel>
-          <Input size="sm" placeholder="Search" startDecorator={<SearchIcon />} value={searchKeyWord} onChange={(e) => {setSearchKeyWord(e.target.value)}}/>
+          <Input 
+            size="sm" 
+            placeholder="Search" 
+            startDecorator={<SearchIcon />} 
+            value={searchKeyWord} 
+            onChange={(e) => {setSearchKeyWord(e.target.value)}}
+            />
         </FormControl>
         {renderFilters()}
       </Box>
