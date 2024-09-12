@@ -26,7 +26,7 @@ jobs:
     
     - name: Build Docker image
       run: |
-        docker build -t part-admin .
+        docker build -t part-admin:0.1.0 .
     
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
@@ -35,7 +35,9 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
     
     - name: Push Docker image to Docker Hub
-      run: docker push beomjin97/part-admin
+      run: | 
+        docker tag part-admin:0.1.0 beomjin97/part-admin:0.1.0
+        docker push beomjin97/part-admin:0.1.0
 
     - name: Deploy Docker image to server
       run: |
