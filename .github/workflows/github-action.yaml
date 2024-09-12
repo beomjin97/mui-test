@@ -39,6 +39,13 @@ jobs:
         docker tag part-admin:0.1.0 beomjin97/part-admin:0.1.0
         docker push beomjin97/part-admin:0.1.0
 
+    - name: Set up SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H {{secrets.SERVER}} >> ~/.ssh/known_hosts
+
     - name: Deploy Docker image to server
       run: |
         ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER }} << EOF
