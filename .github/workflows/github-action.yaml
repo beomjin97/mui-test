@@ -35,7 +35,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
     
     - name: Push Docker image to Docker Hub
-      run: docker push part-admin
+      run: docker push beomjin97/part-admin
 
     - name: Deploy Docker image to server
       run: |
