@@ -50,8 +50,8 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER }} << EOF
         echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
-        docker pull part-admin
+        docker pull ${{ secrets.DOCKER_USERNAME }}/part-admin:0.1.0
         docker stop part-admin || true
         docker rm part-admin || true
-        docker run -d --name part-admin -p 80:80 -p 443:443 -v /root/ssl:/etc/nginx/ssl part-admin 
+        docker run -d --name part-admin -p 80:80 -p 443:443 -v /root/ssl:/etc/nginx/ssl ${{ secrets.DOCKER_USERNAME }}/part-admin:0.1.0
         EOF
