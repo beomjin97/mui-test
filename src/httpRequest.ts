@@ -6,7 +6,7 @@ import { CreateHistroyDto } from "./dto/createHistory.dto";
 import { Part } from "./response/part";
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3001',
+    baseURL: 'https://58.227.27.19/api',
     timeout: 3000,
     
 })
